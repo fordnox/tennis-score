@@ -13,7 +13,10 @@ interface Props {
  */
 export function ServeIndicator({ serverName, onToggle }: Props) {
   return (
-    <div className="relative flex shrink-0 items-center justify-center bg-black portrait:h-px portrait:w-full landscape:h-full landscape:w-px">
+    // z-10 is load-bearing: the panels either side are `relative`, so without
+    // it they paint over the pill (which overflows this hairline strip) and
+    // swallow taps on half of it.
+    <div className="relative z-10 flex shrink-0 items-center justify-center bg-black portrait:h-px portrait:w-full landscape:h-full landscape:w-px">
       <button
         type="button"
         onClick={onToggle}
