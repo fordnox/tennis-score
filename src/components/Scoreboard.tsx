@@ -42,8 +42,9 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
       />
       {panel(1)}
 
-      {/* Sits inside the safe area so it clears the notch and home indicator. */}
-      <div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-[max(0.75rem,env(safe-area-inset-right))] z-10 flex items-center gap-1">
+      {/* Bottom-right, within thumb reach. Inset from the safe area so it clears
+          the iOS home indicator and any gesture bar. */}
+      <div className="absolute right-[max(0.75rem,env(safe-area-inset-right))] bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-10 flex items-center gap-1">
         <button
           type="button"
           onClick={() => setShowAbout(true)}
