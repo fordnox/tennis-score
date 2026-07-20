@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "tt-scoreboard",
+  "name": "tennis-score",
   "compatibility_date": "2026-07-13",
 
   // A static site with no server code, so there is no `main` — Cloudflare
