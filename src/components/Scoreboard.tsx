@@ -45,6 +45,12 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
       {/* Bottom-right, within thumb reach. Inset from the safe area so it clears
           the iOS home indicator and any gesture bar. */}
       <div className="absolute right-[max(0.75rem,env(safe-area-inset-right))] bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-10 flex items-center gap-1">
+        {/* The format in play, so it can be checked without opening settings.
+            Not interactive — pointer-events-none keeps it from shrinking the
+            adjacent tap targets. */}
+        <span className="pointer-events-none mr-1 text-[11px] tracking-wide text-white/40 uppercase tabular-nums">
+          {state.target} pts &middot; best of {state.bestOf}
+        </span>
         <button
           type="button"
           onClick={() => setShowAbout(true)}

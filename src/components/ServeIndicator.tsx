@@ -21,9 +21,9 @@ export function ServeIndicator({ serverName, onToggle }: Props) {
         type="button"
         onClick={onToggle}
         aria-label={`${serverName} is serving. Tap to switch server.`}
-        className="absolute flex touch-manipulation items-center gap-2 rounded-full border border-white/15 bg-neutral-900 px-4 py-2.5 text-xs font-medium tracking-wide text-neutral-300 uppercase shadow-lg active:bg-neutral-800"
+        className="absolute flex touch-manipulation items-center gap-2.5 rounded-full border border-white/15 bg-neutral-900 px-7 py-4 text-sm font-medium tracking-wide text-neutral-300 uppercase shadow-lg active:bg-neutral-800"
       >
-        <ArrowLeftRight className="size-4" aria-hidden />
+        <ArrowLeftRight className="size-5" aria-hidden />
         Serve
       </button>
     </div>
