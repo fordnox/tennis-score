@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "tt-scoreboard",
+  "compatibility_date": "2026-07-13",
+
+  // A static site with no server code, so there is no `main` — Cloudflare
+  // serves the build output directly from its asset storage.
+  "assets": {
+    "directory": "./dist",
+    // The app has no router, but this also means a stray deep link or a stale
+    // home-screen URL loads the board instead of a 404.
+    "not_found_handling": "single-page-application"
+  },
+
+  // custom_domain provisions the DNS record and certificate for tt.woz.lt and
+  // takes over the hostname, so no separate DNS entry is needed. The woz.lt
+  // zone must already exist in the same Cloudflare account.
+  "routes": [{ "pattern": "tt.woz.lt", "custom_domain": true }],
+
+  "observability": { "enabled": true }
+}
