@@ -60,7 +60,18 @@ Rolling back a bad deploy: `npx wrangler versions list`, then `npx wrangler roll
 ## Adding it to a phone home screen
 
 Run `npm run dev -- --host`, then open the printed network address on the phone and use
-*Share → Add to Home Screen*. It launches fullscreen with no browser chrome.
+*Share → Add to Home Screen*. It launches with no browser chrome.
+
+The manifest asks for `display: fullscreen`, with `display_override` falling back through
+`standalone` and `minimal-ui`. On Android that hides the status bar entirely — clock, battery and
+all — which is what you want for a board propped on the table. **iOS ignores `display`
+altogether**: home-screen web apps there are driven by `apple-mobile-web-app-capable`, and
+standalone is as far as Safari goes. `black-translucent` on the status-bar meta gets the closest
+approximation by letting the board paint underneath it.
+
+Because the status bar can be absent or overlapping depending on platform, the cog/history/info
+buttons are positioned with `max(0.75rem, env(safe-area-inset-top))` so they sit correctly either
+way.
 
 Two things only behave correctly on a real device, not in desktop emulation: the swipe-down
 gesture (which has to beat pull-to-refresh) and the safe-area insets around the notch. Test those
