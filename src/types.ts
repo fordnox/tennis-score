@@ -8,8 +8,12 @@ export const TARGETS: Target[] = [11, 21]
 export const BEST_OF: BestOf[] = [3, 5, 7]
 
 export const STORAGE_KEY = 'tt-scoreboard-v1'
-export const STATE_VERSION = 1
-export const HISTORY_LIMIT = 20
+export const MATCH_HISTORY_KEY = 'tt-scoreboard-history-v1'
+export const STATE_VERSION = 2
+/** Depth of the swipe-down undo stack for the match in progress. */
+export const UNDO_LIMIT = 20
+/** How many finished matches to keep before dropping the oldest. */
+export const MATCH_HISTORY_LIMIT = 50
 export const MAX_NAME_LENGTH = 14
 
 /**
@@ -20,6 +24,9 @@ export type LastAction = { type: 'point'; player: PlayerId } | { type: 'other' }
 
 export interface MatchState {
   version: typeof STATE_VERSION
+  /** Identifies this match in the archive, so completing and un-completing it
+   *  updates one record rather than piling up duplicates. */
+  matchId: string
   names: Pair<string>
   target: Target
   bestOf: BestOf
@@ -37,8 +44,22 @@ export interface MatchState {
 
 export interface Store {
   state: MatchState
-  /** Undo stack of prior states, newest last, capped at HISTORY_LIMIT. */
+  /** Undo stack of prior states, newest last, capped at UNDO_LIMIT. */
   history: MatchState[]
+}
+
+/** A finished match, kept in the archive. Only completed matches are recorded. */
+export interface MatchRecord {
+  id: string
+  /** ISO timestamp of the winning point. */
+  finishedAt: string
+  names: Pair<string>
+  target: Target
+  bestOf: BestOf
+  games: Pair<number>
+  /** Final score of each game, in order played. */
+  completed: Pair<number>[]
+  winner: PlayerId
 }
 
 export type Action =

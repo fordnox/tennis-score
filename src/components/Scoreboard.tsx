@@ -1,4 +1,4 @@
-import { Settings } from 'lucide-react'
+import { History, Settings } from 'lucide-react'
 import { MatchOverOverlay } from './MatchOverOverlay'
 import { PlayerPanel } from './PlayerPanel'
 import { ServeIndicator } from './ServeIndicator'
@@ -9,9 +9,10 @@ interface Props {
   state: MatchState
   dispatch: React.Dispatch<Action>
   onOpenSettings: () => void
+  onOpenHistory: () => void
 }
 
-export function Scoreboard({ state, dispatch, onOpenSettings }: Props) {
+export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: Props) {
   const needed = gamesToWin(state.bestOf)
   const over = state.matchWinner !== null
 
@@ -39,14 +40,24 @@ export function Scoreboard({ state, dispatch, onOpenSettings }: Props) {
       {panel(1)}
 
       {/* Sits inside the safe area so it clears the notch and home indicator. */}
-      <button
-        type="button"
-        onClick={onOpenSettings}
-        aria-label="Settings"
-        className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-[max(0.75rem,env(safe-area-inset-right))] z-10 touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
-      >
-        <Settings className="size-5" aria-hidden />
-      </button>
+      <div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-[max(0.75rem,env(safe-area-inset-right))] z-10 flex items-center gap-1">
+        <button
+          type="button"
+          onClick={onOpenHistory}
+          aria-label="Match history"
+          className="touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
+        >
+          <History className="size-5" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={onOpenSettings}
+          aria-label="Settings"
+          className="touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
+        >
+          <Settings className="size-5" aria-hidden />
+        </button>
+      </div>
 
       {state.matchWinner !== null && (
         <MatchOverOverlay

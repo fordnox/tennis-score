@@ -11,9 +11,15 @@ no accounts, works offline.
 - **Serve** — the glowing dot marks who is serving. Tap the `SERVE` pill in the middle to switch.
   It never moves on its own.
 - **Cog** (top right) — player names, 11 or 21 points, best of 3/5/7, and the reset actions.
+- **Clock** (next to the cog) — every finished match, newest first, with the winner, the games
+  tally and each game's final score.
 
 Games are win-by-2: at 10-10 (or 20-20) play continues until someone leads by two. Game pips under
 each name show games won out of the number needed to take the match.
+
+A match is archived the moment it is won, and un-archived if you undo that winning point — so a
+mis-tapped match point doesn't leave a phantom result behind. Abandoned matches are never recorded;
+only completed ones. The last 50 are kept.
 
 ## Development
 
@@ -26,6 +32,11 @@ npm run preview  # serve the production build
 
 The scoring rules live in `src/lib/match.ts` and are pure functions with no UI dependencies —
 that is where to look first, and `src/lib/match.test.ts` covers deuce, best-of-N and undo.
+The match archive is `src/lib/history.ts`, also pure, tested in `src/lib/history.test.ts`.
+
+Two independent localStorage keys: `tt-scoreboard-v1` for the match in progress and
+`tt-scoreboard-history-v1` for the archive. Keeping them apart means corrupt data in one cannot
+take the other down. Both are read defensively and fall back to empty rather than throwing.
 
 ## Adding it to a phone home screen
 

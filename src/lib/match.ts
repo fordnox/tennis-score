@@ -1,6 +1,7 @@
+import { newId } from './id'
 import {
-  HISTORY_LIMIT,
   MAX_NAME_LENGTH,
+  UNDO_LIMIT,
   STATE_VERSION,
   type Action,
   type BestOf,
@@ -34,6 +35,7 @@ export function isDeuce(points: Pair<number>, target: number): boolean {
 export function initialState(overrides: Partial<MatchState> = {}): MatchState {
   return {
     version: STATE_VERSION,
+    matchId: newId(),
     names: ['', ''],
     target: 11,
     bestOf: 5,
@@ -149,7 +151,7 @@ export function rootReducer(store: Store, action: Action): Store {
   if (action.type === 'POINT') {
     const next = matchReducer(state, action)
     if (next === state) return store // match already over
-    return { state: next, history: [...history, state].slice(-HISTORY_LIMIT) }
+    return { state: next, history: [...history, state].slice(-UNDO_LIMIT) }
   }
 
   const next = matchReducer(state, action)
