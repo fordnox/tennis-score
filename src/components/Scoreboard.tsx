@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { History, Info, Settings } from 'lucide-react'
 import { AboutDialog } from './AboutDialog'
+import { BoardMenu } from './BoardMenu'
 import { MatchOverOverlay } from './MatchOverOverlay'
 import { PlayerPanel } from './PlayerPanel'
 import { ServeIndicator } from './ServeIndicator'
@@ -51,30 +51,13 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
         <span className="pointer-events-none mr-1 text-[11px] tracking-wide text-white/40 uppercase tabular-nums">
           {state.target} pts &middot; best of {state.bestOf}
         </span>
-        <button
-          type="button"
-          onClick={() => setShowAbout(true)}
-          aria-label="How it works"
-          className="touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
-        >
-          <Info className="size-5" aria-hidden />
-        </button>
-        <button
-          type="button"
-          onClick={onOpenHistory}
-          aria-label="Match history"
-          className="touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
-        >
-          <History className="size-5" aria-hidden />
-        </button>
-        <button
-          type="button"
-          onClick={onOpenSettings}
-          aria-label="Settings"
-          className="touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
-        >
-          <Settings className="size-5" aria-hidden />
-        </button>
+        <BoardMenu
+          onNewGame={() => dispatch({ type: 'RESET_GAME' })}
+          onNewMatch={() => dispatch({ type: 'RESET_MATCH' })}
+          onOpenHistory={onOpenHistory}
+          onOpenSettings={onOpenSettings}
+          onOpenAbout={() => setShowAbout(true)}
+        />
       </div>
 
       {state.matchWinner !== null && (

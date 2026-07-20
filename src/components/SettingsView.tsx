@@ -39,7 +39,6 @@ type PendingFormat =
 
 export function SettingsView({ state, dispatch, onClose }: Props) {
   const [pending, setPending] = useState<PendingFormat | null>(null)
-  const [confirmNewMatch, setConfirmNewMatch] = useState(false)
   const started = matchStarted(state)
 
   const applyFormat = (change: PendingFormat) => {
@@ -137,25 +136,8 @@ export function SettingsView({ state, dispatch, onClose }: Props) {
           </div>
         </section>
 
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xs tracking-[0.15em] text-neutral-400 uppercase">Reset</h2>
-          <Button
-            variant="outline"
-            className="h-12 justify-start text-base"
-            onClick={() => dispatch({ type: 'RESET_GAME' })}
-          >
-            New game
-            <span className="ml-auto text-xs text-neutral-500">Keeps games won</span>
-          </Button>
-          <Button
-            variant="outline"
-            className="h-12 justify-start text-base text-red-400 hover:text-red-400"
-            onClick={() => setConfirmNewMatch(true)}
-          >
-            New match
-            <span className="ml-auto text-xs text-neutral-500">Clears everything</span>
-          </Button>
-        </section>
+        {/* New game / new match live in the board menu — they are in-play
+            actions, not configuration. */}
       </div>
 
       <AlertDialog open={pending !== null} onOpenChange={(o) => !o && setPending(null)}>
@@ -181,27 +163,6 @@ export function SettingsView({ state, dispatch, onClose }: Props) {
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog open={confirmNewMatch} onOpenChange={setConfirmNewMatch}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Start a new match?</AlertDialogTitle>
-            <AlertDialogDescription>
-              The current score and games won will be cleared. Player names and format are kept.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                dispatch({ type: 'RESET_MATCH' })
-                onClose()
-              }}
-            >
-              New match
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   )
 }

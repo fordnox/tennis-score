@@ -10,9 +10,10 @@ no accounts, works offline.
   undo also un-does the game or match it won.
 - **Serve** — the glowing dot marks who is serving. Tap the `SERVE` pill in the middle to switch.
   It never moves on its own.
-- **Cog** (top right) — player names, 11 or 21 points, best of 3/5/7, and the reset actions.
-- **Clock** (next to the cog) — every finished match, newest first, with the winner, the games
-  tally and each game's final score.
+- **Menu** (bottom right) — new game, new match, match history, settings, and this explanation.
+  Everything that isn't scoring lives behind this one button, so the board stays uncluttered.
+  New match asks for confirmation; new game keeps the games already won.
+- **Settings** holds only configuration: player names, 11 or 21 points, best of 3/5/7.
 
 Games are win-by-2: at 10-10 (or 20-20) play continues until someone leads by two. Game pips under
 each name show games won out of the number needed to take the match.

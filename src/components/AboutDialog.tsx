@@ -1,4 +1,4 @@
-import { ChevronDown, Clock, Hand, Repeat2, Settings } from 'lucide-react'
+import { ChevronDown, Hand, Menu, Repeat2 } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -56,12 +56,9 @@ export function AboutDialog({ open, onOpenChange }: Props) {
             middle to switch. It never changes on its own.
           </Control>
 
-          <Control icon={<Settings className="size-4" />} title="Settings">
-            Player names, 11 or 21 points, best of 3/5/7, and starting a new game or match.
-          </Control>
-
-          <Control icon={<Clock className="size-4" />} title="History">
-            Every finished match, with the winner and each game's score.
+          <Control icon={<Menu className="size-4" />} title="Menu">
+            The button in the bottom corner holds everything else: start a new game or match, the
+            history of finished matches, and settings for names and format.
           </Control>
         </ul>
 
