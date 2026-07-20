@@ -1,4 +1,6 @@
-import { History, Settings } from 'lucide-react'
+import { useState } from 'react'
+import { History, Info, Settings } from 'lucide-react'
+import { AboutDialog } from './AboutDialog'
 import { MatchOverOverlay } from './MatchOverOverlay'
 import { PlayerPanel } from './PlayerPanel'
 import { ServeIndicator } from './ServeIndicator'
@@ -13,6 +15,7 @@ interface Props {
 }
 
 export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: Props) {
+  const [showAbout, setShowAbout] = useState(false)
   const needed = gamesToWin(state.bestOf)
   const over = state.matchWinner !== null
 
@@ -43,6 +46,14 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
       <div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-[max(0.75rem,env(safe-area-inset-right))] z-10 flex items-center gap-1">
         <button
           type="button"
+          onClick={() => setShowAbout(true)}
+          aria-label="How it works"
+          className="touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
+        >
+          <Info className="size-5" aria-hidden />
+        </button>
+        <button
+          type="button"
           onClick={onOpenHistory}
           aria-label="Match history"
           className="touch-manipulation rounded-full bg-black/40 p-3 text-white/50 active:text-white"
@@ -67,6 +78,8 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
           onUndo={() => dispatch({ type: 'UNDO_FOR', player: state.matchWinner as PlayerId })}
         />
       )}
+
+      <AboutDialog open={showAbout} onOpenChange={setShowAbout} />
     </div>
   )
 }
