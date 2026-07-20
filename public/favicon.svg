@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#0a0a0a" />
+  <!-- The two halves of the board, in the panel colours. -->
+  <rect x="96" y="150" width="150" height="212" rx="12" fill="#0f766e" />
+  <rect x="266" y="150" width="150" height="212" rx="12" fill="#c2410c" />
+  <!-- The ball, sitting over the net line. -->
+  <circle cx="256" cy="256" r="36" fill="#fafafa" />
+</svg>
