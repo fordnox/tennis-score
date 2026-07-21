@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Clock, Info, Menu, RotateCcw, Settings, Trash2 } from 'lucide-react'
+import { Clock, Info, Keyboard, Menu, RotateCcw, Settings, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +24,7 @@ interface Props {
   onOpenHistory: () => void
   onOpenSettings: () => void
   onOpenAbout: () => void
+  onOpenShortcuts: () => void
 }
 
 /** Roomy rows — this is driven by thumb, not cursor. */
@@ -35,6 +36,7 @@ export function BoardMenu({
   onOpenHistory,
   onOpenSettings,
   onOpenAbout,
+  onOpenShortcuts,
 }: Props) {
   const [confirmNewMatch, setConfirmNewMatch] = useState(false)
 
@@ -77,6 +79,11 @@ export function BoardMenu({
           <DropdownMenuItem className={ITEM} onSelect={onOpenSettings}>
             <Settings />
             <span>Settings</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem className={ITEM} onSelect={onOpenShortcuts}>
+            <Keyboard />
+            <span>Keyboard shortcuts</span>
           </DropdownMenuItem>
 
           <DropdownMenuItem className={ITEM} onSelect={onOpenAbout}>

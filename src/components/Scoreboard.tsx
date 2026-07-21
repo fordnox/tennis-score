@@ -4,6 +4,8 @@ import { BoardMenu } from './BoardMenu'
 import { MatchOverOverlay } from './MatchOverOverlay'
 import { PlayerPanel } from './PlayerPanel'
 import { ServeIndicator } from './ServeIndicator'
+import { ShortcutsDialog } from './ShortcutsDialog'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 import { displayName, gamesToWin } from '@/lib/match'
 import type { Action, MatchState, PlayerId } from '@/types'
 
@@ -16,8 +18,11 @@ interface Props {
 
 export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: Props) {
   const [showAbout, setShowAbout] = useState(false)
+  const [showShortcuts, setShowShortcuts] = useState(false)
   const needed = gamesToWin(state.bestOf)
   const over = state.matchWinner !== null
+
+  useKeyboardShortcuts(dispatch, !over)
 
   const panel = (p: PlayerId) => (
     <PlayerPanel
@@ -57,6 +62,7 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
           onOpenHistory={onOpenHistory}
           onOpenSettings={onOpenSettings}
           onOpenAbout={() => setShowAbout(true)}
+          onOpenShortcuts={() => setShowShortcuts(true)}
         />
       </div>
 
@@ -70,6 +76,12 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
       )}
 
       <AboutDialog open={showAbout} onOpenChange={setShowAbout} />
+
+      <ShortcutsDialog
+        open={showShortcuts}
+        onOpenChange={setShowShortcuts}
+        names={[displayName(state, 0), displayName(state, 1)]}
+      />
     </div>
   )
 }
