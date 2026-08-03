@@ -59,7 +59,7 @@ export function SettingsView({ state, dispatch, onClose }: Props) {
   return (
     <div className="h-dvh w-dvw overflow-y-auto overscroll-contain bg-neutral-950 text-neutral-100 touch-manipulation">
       <div
-        className="mx-auto flex max-w-md flex-col gap-8 px-6 pb-16"
+        className="mx-auto flex min-h-full max-w-md flex-col gap-8 px-6 pb-16"
         style={{
           paddingTop: 'max(1.5rem, env(safe-area-inset-top))',
         }}
@@ -138,6 +138,13 @@ export function SettingsView({ state, dispatch, onClose }: Props) {
 
         {/* New game / new match live in the board menu — they are in-play
             actions, not configuration. */}
+
+        <footer className="mt-auto pt-4 text-center text-xs text-neutral-500">
+          Feedback?{' '}
+          <a href="mailto:andy@woz.lt" className="underline underline-offset-2 hover:text-neutral-300">
+            andy@woz.lt
+          </a>
+        </footer>
       </div>
 
       <AlertDialog open={pending !== null} onOpenChange={(o) => !o && setPending(null)}>
