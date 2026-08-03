@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { gamesToWin, initialState, initialStore, isGameWon, rootReducer } from './match'
+import {
+  gamesToWin,
+  initialState,
+  initialStore,
+  isGameWon,
+  rootReducer,
+  serveSwitchDue,
+} from './match'
 import type { Action, MatchState, PlayerId, Store } from '@/types'
 
 const run = (store: Store, actions: Action[]) => actions.reduce(rootReducer, store)
@@ -141,6 +148,42 @@ describe('undo', () => {
   it('never drives a score below zero', () => {
     const undone = rootReducer(initialStore(), { type: 'UNDO_FOR', player: 0 })
     expect(undone.state.points).toEqual([0, 0])
+  })
+})
+
+describe('serveSwitchDue', () => {
+  it('falls due every second point in an 11-point game', () => {
+    expect(serveSwitchDue(initialState())).toBe(false)
+    expect(serveSwitchDue(run(start(), [point(0)]).state)).toBe(false)
+    expect(serveSwitchDue(run(start(), [point(0), point(1)]).state)).toBe(true)
+    expect(serveSwitchDue(run(start(), rally(2, 1)).state)).toBe(false)
+    expect(serveSwitchDue(run(start(), rally(2, 2)).state)).toBe(true)
+  })
+
+  it('falls due every fifth point in a 21-point game', () => {
+    expect(serveSwitchDue(run(start({ target: 21 }), rally(2, 2)).state)).toBe(false)
+    expect(serveSwitchDue(run(start({ target: 21 }), rally(3, 2)).state)).toBe(true)
+    expect(serveSwitchDue(run(start({ target: 21 }), rally(4, 2)).state)).toBe(false)
+  })
+
+  it('falls due every point from deuce on', () => {
+    const deuce = run(start(), rally(10, 10))
+    expect(serveSwitchDue(deuce.state)).toBe(true)
+    // 11-10: an odd total, due only because of the deuce rule.
+    expect(serveSwitchDue(rootReducer(deuce, point(0)).state)).toBe(true)
+  })
+
+  it('falls due at the start of every game but the first', () => {
+    const s = run(start(), rally(11, 0)).state
+    expect(s.points).toEqual([0, 0])
+    expect(serveSwitchDue(s)).toBe(true)
+  })
+
+  it('never falls due once the match is decided', () => {
+    let store = start({ bestOf: 3 })
+    for (let i = 0; i < 2; i++) store = run(store, rally(11, 0))
+    expect(store.state.matchWinner).toBe(0)
+    expect(serveSwitchDue(store.state)).toBe(false)
   })
 })
 

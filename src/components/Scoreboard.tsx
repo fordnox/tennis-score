@@ -6,7 +6,7 @@ import { PlayerPanel } from './PlayerPanel'
 import { ServeIndicator } from './ServeIndicator'
 import { ShortcutsDialog } from './ShortcutsDialog'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
-import { displayName, gamesToWin } from '@/lib/match'
+import { displayName, gamesToWin, serveSwitchDue } from '@/lib/match'
 import type { Action, MatchState, PlayerId } from '@/types'
 
 interface Props {
@@ -21,6 +21,13 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
   const [showShortcuts, setShowShortcuts] = useState(false)
   const needed = gamesToWin(state.bestOf)
   const over = state.matchWinner !== null
+
+  // The switch-serve glow is dismissed by toggling the serve, but only for the
+  // score it fired at — any change to the score re-arms it. Deliberately not
+  // persisted: a stale hint after a reload is harmless.
+  const [switchedAt, setSwitchedAt] = useState<string | null>(null)
+  const scoreKey = `${state.completed.length}:${state.points[0]}-${state.points[1]}`
+  const switchDue = serveSwitchDue(state) && switchedAt !== scoreKey
 
   useKeyboardShortcuts(dispatch, !over)
 
@@ -43,7 +50,11 @@ export function Scoreboard({ state, dispatch, onOpenSettings, onOpenHistory }: P
       {panel(0)}
       <ServeIndicator
         serverName={displayName(state, state.server)}
-        onToggle={() => dispatch({ type: 'TOGGLE_SERVER' })}
+        switchDue={switchDue}
+        onToggle={() => {
+          setSwitchedAt(scoreKey)
+          dispatch({ type: 'TOGGLE_SERVER' })
+        }}
       />
       {panel(1)}
 
