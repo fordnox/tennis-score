@@ -2,10 +2,10 @@ export type PlayerId = 0 | 1
 export type Pair<T> = [T, T]
 
 export type Target = 11 | 21
-export type BestOf = 3 | 5 | 7
+export type BestOf = 1 | 3 | 5 | 7
 
 export const TARGETS: Target[] = [11, 21]
-export const BEST_OF: BestOf[] = [3, 5, 7]
+export const BEST_OF: BestOf[] = [1, 3, 5, 7]
 
 export const STORAGE_KEY = 'tt-scoreboard-v1'
 export const MATCH_HISTORY_KEY = 'tt-scoreboard-history-v1'

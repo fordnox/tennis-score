@@ -31,7 +31,7 @@ function isMatchState(v: unknown): v is MatchState {
     Array.isArray(s.names) &&
     s.names.length === 2 &&
     (s.target === 11 || s.target === 21) &&
-    (s.bestOf === 3 || s.bestOf === 5 || s.bestOf === 7) &&
+    (s.bestOf === 1 || s.bestOf === 3 || s.bestOf === 5 || s.bestOf === 7) &&
     isPair(s.points) &&
     isPair(s.games) &&
     (s.server === 0 || s.server === 1) &&
