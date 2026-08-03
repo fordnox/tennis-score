@@ -212,6 +212,13 @@ describe('config and resets', () => {
     expect(s.points).toEqual([1, 0])
   })
 
+  it('swaps the names without touching the score', () => {
+    const store = run(start({ names: ['Ann', 'Bo'] }), [point(0)])
+    const s = rootReducer(store, { type: 'SWAP_NAMES' }).state
+    expect(s.names).toEqual(['Bo', 'Ann'])
+    expect(s.points).toEqual([1, 0])
+  })
+
   it('caps names at the maximum length', () => {
     const s = rootReducer(initialStore(), {
       type: 'SET_NAME',

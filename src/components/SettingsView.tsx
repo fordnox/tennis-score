@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { ArrowLeftRight, X } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,7 +14,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { loadHistory } from '@/lib/history'
 import { matchStarted } from '@/lib/match'
+import { loadRoster, rememberNames } from '@/lib/roster'
 import {
   BEST_OF,
   MAX_NAME_LENGTH,
@@ -41,6 +43,24 @@ export function SettingsView({ state, dispatch, onClose }: Props) {
   const [pending, setPending] = useState<PendingFormat | null>(null)
   const started = matchStarted(state)
 
+  // Recent player names, offered as one-tap chips so rotating pairs doesn't
+  // mean retyping. Seeded from the match archive the first time, before any
+  // name has been remembered directly.
+  const [roster, setRoster] = useState<string[]>(() => {
+    const stored = loadRoster()
+    if (stored.length > 0) return stored
+    const archived = loadHistory().flatMap((r) => r.names)
+    return archived.length > 0 ? rememberNames(archived) : []
+  })
+
+  // Names are harvested on blur rather than per keystroke, so half-typed
+  // names never enter the roster. Closing settings harvests too, covering
+  // "typed and immediately tapped X".
+  const close = () => {
+    rememberNames(state.names)
+    onClose()
+  }
+
   const applyFormat = (change: PendingFormat) => {
     if (change.kind === 'target') dispatch({ type: 'SET_TARGET', value: change.value })
     else dispatch({ type: 'SET_BEST_OF', value: change.value })
@@ -66,13 +86,24 @@ export function SettingsView({ state, dispatch, onClose }: Props) {
       >
         <header className="flex items-center justify-between">
           <h1 className="text-xl font-semibold">Settings</h1>
-          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close settings">
+          <Button variant="ghost" size="icon" onClick={close} aria-label="Close settings">
             <X className="size-5" />
           </Button>
         </header>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-xs tracking-[0.15em] text-neutral-400 uppercase">Players</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs tracking-[0.15em] text-neutral-400 uppercase">Players</h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 gap-1.5 text-xs text-neutral-400"
+              onClick={() => dispatch({ type: 'SWAP_NAMES' })}
+            >
+              <ArrowLeftRight className="size-3.5" aria-hidden />
+              Swap
+            </Button>
+          </div>
           {([0, 1] as PlayerId[]).map((p) => (
             <div key={p} className="flex flex-col gap-2">
               <Label htmlFor={`name-${p}`}>Player {p + 1}</Label>
@@ -88,7 +119,25 @@ export function SettingsView({ state, dispatch, onClose }: Props) {
                 onChange={(e) =>
                   dispatch({ type: 'SET_NAME', player: p, value: e.target.value })
                 }
+                onBlur={() => setRoster(rememberNames([state.names[p]]))}
               />
+              {roster.length > 0 && (
+                <ToggleGroup
+                  type="single"
+                  variant="outline"
+                  value={state.names[p].trim()}
+                  onValueChange={(v) =>
+                    v && dispatch({ type: 'SET_NAME', player: p, value: v })
+                  }
+                  className="w-full flex-wrap justify-start"
+                >
+                  {roster.map((n) => (
+                    <ToggleGroupItem key={n} value={n} className="h-9 px-3 text-sm font-normal">
+                      {n}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              )}
             </div>
           ))}
         </section>

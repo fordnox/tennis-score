@@ -131,6 +131,9 @@ export function matchReducer(s: MatchState, action: Action): MatchState {
       return { ...s, names }
     }
 
+    case 'SWAP_NAMES':
+      return { ...s, names: [s.names[1], s.names[0]] }
+
     case 'SET_TARGET':
       return { ...s, target: action.value }
 

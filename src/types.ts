@@ -9,6 +9,9 @@ export const BEST_OF: BestOf[] = [1, 3, 5, 7]
 
 export const STORAGE_KEY = 'tt-scoreboard-v1'
 export const MATCH_HISTORY_KEY = 'tt-scoreboard-history-v1'
+export const PLAYER_ROSTER_KEY = 'tt-scoreboard-roster-v1'
+/** How many recent player names to keep as one-tap chips in settings. */
+export const ROSTER_LIMIT = 8
 export const STATE_VERSION = 2
 /** Depth of the swipe-down undo stack for the match in progress. */
 export const UNDO_LIMIT = 20
@@ -66,6 +69,7 @@ export type Action =
   | { type: 'POINT'; player: PlayerId }
   | { type: 'UNDO_FOR'; player: PlayerId }
   | { type: 'SET_NAME'; player: PlayerId; value: string }
+  | { type: 'SWAP_NAMES' }
   | { type: 'SET_TARGET'; value: Target }
   | { type: 'SET_BEST_OF'; value: BestOf }
   | { type: 'TOGGLE_SERVER' }
