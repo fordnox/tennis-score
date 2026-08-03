@@ -9,7 +9,6 @@ import {
   type Pair,
   type PlayerId,
   type Store,
-  type Target,
 } from '@/types'
 
 export const other = (p: PlayerId): PlayerId => (p === 0 ? 1 : 0)
@@ -33,14 +32,14 @@ export function isDeuce(points: Pair<number>, target: number): boolean {
   return points[0] >= target - 1 && points[0] === points[1]
 }
 
-/** Points served in a row before the serve passes: 2 in an 11-point game, 5 in a 21-point game. */
-const serveInterval = (target: Target) => (target === 11 ? 2 : 5)
+/** Points served in a row before the serve passes, regardless of game target. */
+const SERVE_INTERVAL = 5
 
 /**
- * True when the rules say the serve changes hands at the current score: after
- * every serveInterval points, after every point once both players are within
- * one of target (deuce and beyond), and at the start of every game but the
- * first — the opening server alternates game to game.
+ * True when the serve changes hands at the current score: after every
+ * SERVE_INTERVAL points, after every point once both players are within one of
+ * target (deuce and beyond), and at the start of every game but the first —
+ * the opening server alternates game to game.
  *
  * The server itself stays manual; this only powers the hint.
  */
@@ -50,7 +49,7 @@ export function serveSwitchDue(s: MatchState): boolean {
   const total = a + b
   if (total === 0) return s.completed.length > 0
   if (a >= s.target - 1 && b >= s.target - 1) return true
-  return total % serveInterval(s.target) === 0
+  return total % SERVE_INTERVAL === 0
 }
 
 export function initialState(overrides: Partial<MatchState> = {}): MatchState {

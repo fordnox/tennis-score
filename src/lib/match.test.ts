@@ -152,18 +152,17 @@ describe('undo', () => {
 })
 
 describe('serveSwitchDue', () => {
-  it('falls due every second point in an 11-point game', () => {
+  it('falls due every fifth point in an 11-point game', () => {
     expect(serveSwitchDue(initialState())).toBe(false)
-    expect(serveSwitchDue(run(start(), [point(0)]).state)).toBe(false)
-    expect(serveSwitchDue(run(start(), [point(0), point(1)]).state)).toBe(true)
-    expect(serveSwitchDue(run(start(), rally(2, 1)).state)).toBe(false)
-    expect(serveSwitchDue(run(start(), rally(2, 2)).state)).toBe(true)
+    expect(serveSwitchDue(run(start(), rally(2, 2)).state)).toBe(false)
+    expect(serveSwitchDue(run(start(), rally(3, 2)).state)).toBe(true)
+    expect(serveSwitchDue(run(start(), rally(4, 2)).state)).toBe(false)
   })
 
   it('falls due every fifth point in a 21-point game', () => {
     expect(serveSwitchDue(run(start({ target: 21 }), rally(2, 2)).state)).toBe(false)
     expect(serveSwitchDue(run(start({ target: 21 }), rally(3, 2)).state)).toBe(true)
-    expect(serveSwitchDue(run(start({ target: 21 }), rally(4, 2)).state)).toBe(false)
+    expect(serveSwitchDue(run(start({ target: 21 }), rally(5, 5)).state)).toBe(true)
   })
 
   it('falls due every point from deuce on', () => {
